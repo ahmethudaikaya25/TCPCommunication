@@ -9,4 +9,8 @@
     <string name="login">Login</string>
     <string name="invalid_login_arguments">Invalid Login Arguments</string>
     <string name="error_all_fields_required_description">All login fields must be filled</string>
+    <string name="error_invalid_ip_description">Invalid IP information, please give correct IP information</string>
+    <string name="error_invalid_port_description">Invalid port information, please give correct port</string>
+    <string name="Connection_Error">Connection Error</string>
+    <string name="TCP_Server_Could_Not_Be_Started">Server could not started, please try again</string>
 </resources>

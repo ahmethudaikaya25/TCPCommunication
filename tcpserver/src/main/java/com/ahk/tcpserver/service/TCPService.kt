@@ -1,4 +1,4 @@
-package com.ahk.tcpcommunication.core.data
+package com.ahk.tcpserver.service
 
 import android.app.Service
 import android.content.Intent
@@ -6,16 +6,16 @@ import android.os.Build
 import android.os.IBinder
 import com.ahk.tcpcommunication.TCPServiceData
 import com.ahk.tcpcommunication.TCPServiceDataCallback
-import com.ahk.tcpcommunication.core.model.ServerModel
+import com.ahk.tcpserver.model.ServerModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 
 class TCPService : Service() {
     val disposables = CompositeDisposable()
-    val tcpServer = ITCPServer()
+    val tcpServer = com.ahk.tcpserver.server.ITCPServer()
 
-    val binder = object : TCPServiceData.Stub() {
+    private val binder = object : TCPServiceData.Stub() {
         override fun messageReceive(onMessageReceived: TCPServiceDataCallback?) {
             tcpServer.listen().observeOn(Schedulers.io()).let { observable ->
                 disposables.add(

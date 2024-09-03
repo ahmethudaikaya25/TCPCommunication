@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "TCP Communication"
 include(":app")
+include(":tcpserver")

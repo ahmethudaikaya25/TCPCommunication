@@ -1,6 +1,6 @@
 package com.ahk.tcpcommunication.core.model
 
-data class User(
+data class LoginUser(
     val name: String,
     val ip: String,
     val port: Int,

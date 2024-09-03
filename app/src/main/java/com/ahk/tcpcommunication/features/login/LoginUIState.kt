@@ -1,18 +1,20 @@
 package com.ahk.tcpcommunication.features.login
 
-import com.ahk.tcpcommunication.core.model.User
+import com.ahk.tcpcommunication.core.model.LoginUser
 
 sealed class LoginUIState {
     object Loading : LoginUIState()
     data class Success(
-        val user: User,
+        val loginUser: LoginUser,
     ) : LoginUIState()
 
-    object Error : LoginUIState()
+    data class Error(
+        val message: String,
+    ) : LoginUIState()
 
-    fun getSuccessUser(): User? {
+    fun getSuccessUser(): LoginUser? {
         return when (this) {
-            is Success -> user
+            is Success -> loginUser
             else -> null
         }
     }

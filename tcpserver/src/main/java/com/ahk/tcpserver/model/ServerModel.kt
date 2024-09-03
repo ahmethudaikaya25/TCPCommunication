@@ -1,4 +1,4 @@
-package com.ahk.tcpcommunication.core.model
+package com.ahk.tcpserver.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

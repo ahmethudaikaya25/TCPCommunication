@@ -1,6 +1,6 @@
-package com.ahk.tcpcommunication.core.data
+package com.ahk.tcpserver.server
 
-import com.ahk.tcpcommunication.core.model.ServerModel
+import com.ahk.tcpserver.model.ServerModel
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 interface TCPServer {
