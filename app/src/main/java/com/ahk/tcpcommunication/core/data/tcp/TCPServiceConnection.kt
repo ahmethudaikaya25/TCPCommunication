@@ -1,7 +1,6 @@
 package com.ahk.tcpcommunication.core.data.tcp
 
-import android.content.ComponentName
-import com.ahk.tcpcommunication.core.model.ServerModel
+import com.ahk.tcpserver.model.ServerModel
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.subjects.PublishSubject
 

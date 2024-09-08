@@ -6,12 +6,10 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import com.ahk.tcpcommunication.R
-import com.ahk.tcpcommunication.TCPServiceData
-import com.ahk.tcpcommunication.TCPServiceDataCallback
 import com.ahk.tcpcommunication.core.model.DataException
-import com.ahk.tcpcommunication.core.model.ErrorCode
-import com.ahk.tcpcommunication.core.model.ErrorModel
-import com.ahk.tcpcommunication.core.model.ServerModel
+import com.ahk.tcpcommunication.base.model.ErrorCode
+import com.ahk.tcpcommunication.base.model.ErrorModel
+import com.ahk.tcpserver.model.ServerModel
 import com.ahk.tcpserver.service.TCPService
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -26,18 +24,6 @@ class ITCPServiceConnection @Inject constructor(
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             Timber.d("Service connected")
-
-            val tcpServiceData = TCPServiceData.Stub.asInterface(service)
-            tcpServiceData.messageReceive(object : TCPServiceDataCallback.Stub() {
-                override fun onMessageReceived(message: ByteArray?) {
-                    messageSubject.onNext(message)
-                }
-
-                override fun onErrorOccurred(error: String?) {
-                    Timber.e(error)
-                    messageSubject.onError(Throwable(error))
-                }
-            })
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {

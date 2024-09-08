@@ -1,8 +1,10 @@
 package com.ahk.tcpcommunication.features.login
 
 import androidx.lifecycle.ViewModel
+import com.ahk.tcpcommunication.base.util.toCustomException
 import com.ahk.tcpcommunication.core.model.LoginUser
 import com.ahk.tcpcommunication.domain.login.LoginUseCase
+import com.ahk.tcpcommunication.domain.network.FetchLocalIpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -12,11 +14,25 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
+    private val ipUseCase: FetchLocalIpUseCase,
 ) : ViewModel() {
     val uiState = ReplaySubject.createWithSize<LoginUIState>(1)
     val uiEvent = PublishSubject.create<LoginUIEvent>()
-    private var lastSuccessStateValue: LoginUIState.Success? = null
+    var lastSuccessStateValue: LoginUIState.Success? = null
     private var compositeDisposable = CompositeDisposable()
+
+    fun startState() {
+        ipUseCase.invoke().subscribe(
+            {
+                setState(LoginUIState.Success(LoginUser("", it, 0, "")))
+            },
+            {
+                setState(LoginUIState.Error(it.toCustomException(it).errorModel))
+            },
+            compositeDisposable,
+        )
+    }
+
     fun handleLoginClicked(loginUser: LoginUser) {
         if (uiState.value is LoginUIState.Loading) {
             return
@@ -26,7 +42,7 @@ class LoginViewModel @Inject constructor(
                 setState(LoginUIState.Success(loginUser))
             },
             {
-                setState(LoginUIState.Error(it.message ?: "Unknown error"))
+                setState(LoginUIState.Error(it.toCustomException(it).errorModel))
             },
             compositeDisposable,
         )
@@ -44,7 +60,7 @@ class LoginViewModel @Inject constructor(
         setEvent(LoginUIEvent.LoginClicked(loginUser))
     }
 
-    private fun setState(state: LoginUIState) {
+    fun setState(state: LoginUIState) {
         if (state is LoginUIState.Success) {
             lastSuccessStateValue = state
         }

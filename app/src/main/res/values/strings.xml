@@ -1,16 +1,21 @@
 <resources>
-    <string name="app_name">TCP Communication</string>
-    <string name="Unknown_Error">Unknown Error</string>
-    <string name="An_error_occurred_please_try_again_later">An error occurred please try again later. If It hasn\'t been resolved for a long time, please contact with developer!</string>
+    <string name="Empty_String"></string>
+    <string name="tcp_app_name">TCP Communication</string>
+    <string name="app_name">TCP Comminucation</string>
     <string name="name">Name</string>
-    <string name="ip">Ip (XXX.XXX.XXX.XXX)</string>
+    <string name="ip">IP</string>
     <string name="port">Port</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="invalid_login_arguments">Invalid Login Arguments</string>
-    <string name="error_all_fields_required_description">All login fields must be filled</string>
-    <string name="error_invalid_ip_description">Invalid IP information, please give correct IP information</string>
-    <string name="error_invalid_port_description">Invalid port information, please give correct port</string>
     <string name="Connection_Error">Connection Error</string>
-    <string name="TCP_Server_Could_Not_Be_Started">Server could not started, please try again</string>
+    <string name="TCP_Server_Could_Not_Be_Started">TCP server connection error. Please try again!</string>
+    <string name="Invalid_Login_Arguments">Invalid Connection Informations</string>
+    <string name="Error_All_Fields_Required_Description">Please fill all fields for login</string>
+    <string name="Error_Invalid_Ip_Description">Invalid IP format, please submit correct IP information</string>
+    <string name="Error_Invalid_Port_Description">Invalid IP format, please submit correct port information</string>
+    <string name="There_Is_No_Active_Network_Connection">There is no active network connection. Please connect a wifi</string>
+    <string name="There_Is_No_Wifi_Connection">There is no wifi connection. Please connect to wifi!</string>
+    <string name="Unknown_Error">Unknown Error</string>
+    <string name="Unknown_Error_Message">An error ocurred. Please try again and then contact with us!</string>
+
 </resources>

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.ahk.tcpcommunication.features.login.LoginViewModel" />
@@ -30,6 +31,8 @@
                 android:layout_marginEnd="25dp"
                 android:hint="@string/name"
                 android:inputType="textPersonName"
+                android:text="@{viewModel.uiState.value.successUser != null ? viewModel.uiState.value.successUser.name : viewModel.lastSuccessStateValue.successUser.name, default=``}"
+                android:onTextChanged="@{(text, start, before, count) -> viewModel.setState(viewModel.uiState.value.setSuccessUserName(text.toString()))}"
                 android:padding="10dp"
                 android:textSize="16sp" />
 
@@ -43,6 +46,9 @@
                 android:layout_marginTop="25dp"
                 android:clickable="false"
                 android:enabled="false"
+                android:inputType="number"
+                android:text="@{viewModel.uiState.value.successUser != null ? viewModel.uiState.value.successUser.ip : viewModel.lastSuccessStateValue.successUser.ip, default=``}"
+                android:onTextChanged="@{(text, start, before, count) -> viewModel.setState(viewModel.uiState.value.setSuccessUserIp(text.toString()))}"
                 android:hint="@string/ip" />
 
             <EditText
@@ -55,7 +61,9 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
                 android:hint="@string/port"
-                android:inputType="number" />
+                android:inputType="number"
+                android:text="@{(viewModel.uiState.value.successUser != null) ? String.valueOf(viewModel.uiState.value.successUser.port) : String.valueOf(viewModel.lastSuccessStateValue.successUser.port), default=``}"
+                android:onTextChanged="@{(text, start, before, count) -> viewModel.setState(viewModel.uiState.value.setSuccessUserPort(Integer.parseInt(text.toString())))}"/>
 
             <EditText
                 android:id="@+id/password"
@@ -66,7 +74,9 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
                 android:hint="@string/password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:text="@{viewModel.uiState.value.successUser != null ? viewModel.uiState.value.successUser.password : viewModel.lastSuccessStateValue.successUser.password, default=``}"
+                android:onTextChanged="@{(text, start, before, count) -> viewModel.setState(viewModel.uiState.value.setSuccessUserPassword(text.toString()))}"/>
 
             <Button
                 android:id="@+id/connect"
@@ -77,9 +87,8 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="25dp"
                 android:drawableStart="@drawable/ic_login"
-                android:text="@string/login"
-                android:onClick="@{() -> viewModel.onLoginClicked()}"
-                />
+                android:onClickListener="@{() -> viewModel.onLoginClicked()}"
+                android:text="@string/login" />
 
         </RelativeLayout>
 
