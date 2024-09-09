@@ -54,8 +54,9 @@ class Login : Fragment() {
                 Timber.d("Success state")
             }
             is LoginUIState.Error -> {
-                Timber.d("Error state: %s %s %d %d", state.errorModel.message, state.errorModel.description, state.errorModel.code, state.errorModel.icon)
-                Toast.makeText(requireContext(), state.errorModel.message, Toast.LENGTH_SHORT).show()
+                val errorModel = (state as LoginUIState.Error).errorModel
+                Timber.d("Error state: %s %s %s", getString(errorModel.message), getString(errorModel.description), errorModel.code.name)
+                Toast.makeText(requireContext(), errorModel.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

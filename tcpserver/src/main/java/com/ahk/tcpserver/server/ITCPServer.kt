@@ -35,7 +35,7 @@ class ITCPServer : TCPServer {
                     val client = socket?.accept()
                     dataInputStream = DataInputStream(client?.getInputStream())
                     Timber.d("Client connected: ${client?.inetAddress?.hostAddress}")
-                    if (listen) {
+                    if (isRunning() && isListening()) {
                         listenToClient()
                     }
                 } catch (e: Exception) {

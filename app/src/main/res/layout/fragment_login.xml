@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.ahk.tcpcommunication.features.login.LoginViewModel" />
+
+        <import type="com.ahk.tcpcommunication.features.login.LoginUIState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +32,9 @@
                 android:layout_marginEnd="25dp"
                 android:hint="@string/name"
                 android:inputType="textPersonName"
-                android:text="@{viewModel.uiState.value.successUser != null ? viewModel.uiState.value.successUser.name : viewModel.lastSuccessStateValue.successUser.name, default=``}"
+                app:uiState="@{(LoginUIState) viewModel.uiState.value}"
+                app:lastSuccessState="@{viewModel.lastSuccessStateValue}"
+                app:defaultValue="@{``}"
                 android:onTextChanged="@{(text, start, before, count) -> viewModel.setState(viewModel.uiState.value.setSuccessUserName(text.toString()))}"
                 android:padding="10dp"
                 android:textSize="16sp" />
@@ -47,7 +50,9 @@
                 android:clickable="false"
                 android:enabled="false"
                 android:inputType="number"
-                android:text="@{viewModel.uiState.value.successUser != null ? viewModel.uiState.value.successUser.ip : viewModel.lastSuccessStateValue.successUser.ip, default=``}"
+                app:uiState="@{viewModel.uiState.value}"
+                app:lastSuccessState="@{viewModel.lastSuccessStateValue}"
+                app:defaultValue="@{``}"
                 android:onTextChanged="@{(text, start, before, count) -> viewModel.setState(viewModel.uiState.value.setSuccessUserIp(text.toString()))}"
                 android:hint="@string/ip" />
 
@@ -62,8 +67,10 @@
                 android:layout_marginEnd="25dp"
                 android:hint="@string/port"
                 android:inputType="number"
-                android:text="@{(viewModel.uiState.value.successUser != null) ? String.valueOf(viewModel.uiState.value.successUser.port) : String.valueOf(viewModel.lastSuccessStateValue.successUser.port), default=``}"
-                android:onTextChanged="@{(text, start, before, count) -> viewModel.setState(viewModel.uiState.value.setSuccessUserPort(Integer.parseInt(text.toString())))}"/>
+                app:uiState="@{viewModel.uiState.value}"
+                app:lastSuccessState="@{viewModel.lastSuccessStateValue}"
+                app:defaultValue="@{`0`}"
+                android:onTextChanged="@{(text, start, before, count) -> viewModel.setState(viewModel.uiState.value.setSuccessUserPort(text.toString()))}"/>
 
             <EditText
                 android:id="@+id/password"
@@ -75,7 +82,9 @@
                 android:layout_marginEnd="25dp"
                 android:hint="@string/password"
                 android:inputType="textPassword"
-                android:text="@{viewModel.uiState.value.successUser != null ? viewModel.uiState.value.successUser.password : viewModel.lastSuccessStateValue.successUser.password, default=``}"
+                app:uiState="@{viewModel.uiState.value}"
+                app:lastSuccessState="@{viewModel.lastSuccessStateValue}"
+                app:defaultValue="@{``}"
                 android:onTextChanged="@{(text, start, before, count) -> viewModel.setState(viewModel.uiState.value.setSuccessUserPassword(text.toString()))}"/>
 
             <Button

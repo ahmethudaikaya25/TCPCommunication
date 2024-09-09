@@ -35,11 +35,18 @@ sealed class LoginUIState {
         }
     }
 
-    fun setSuccessUserPort(port: Int): LoginUIState {
-        return when (this) {
-            is Success -> copy(loginUser = loginUser.copy(port = port))
-            else -> Success(LoginUser("", "", port, ""))
+    fun setSuccessUserPort(port: String): LoginUIState {
+        if (port.isEmpty()) {
+            return this
         }
+        val intPort = port.toInt()
+        this.getSuccessUser()?.port?.let {
+            return when (this) {
+                is Success -> copy(loginUser = loginUser.copy(port = intPort))
+                else -> Success(LoginUser("", "", intPort, ""))
+            }
+        }
+        return this
     }
 
     fun setSuccessUserPassword(password: String): LoginUIState {

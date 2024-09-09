@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import com.ahk.tcpaidl.TCPServiceData
+import com.ahk.tcpaidl.TCPServiceDataCallback
 import com.ahk.tcpcommunication.R
-import com.ahk.tcpcommunication.core.model.DataException
 import com.ahk.tcpcommunication.base.model.ErrorCode
 import com.ahk.tcpcommunication.base.model.ErrorModel
+import com.ahk.tcpcommunication.core.model.DataException
 import com.ahk.tcpserver.model.ServerModel
 import com.ahk.tcpserver.service.TCPService
 import io.reactivex.rxjava3.core.Completable
@@ -23,7 +25,19 @@ class ITCPServiceConnection @Inject constructor(
 
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            Timber.d("Service connected")
+            (service as TCPServiceData).messageReceive(object : TCPServiceDataCallback.Stub() {
+                override fun onMessageReceived(message: ByteArray?) {
+                    message?.let {
+                        messageSubject.onNext(it)
+                    }
+                }
+
+                override fun onErrorOccurred(message: String?) {
+                    message?.let {
+                        messageSubject.onError(Throwable(it))
+                    }
+                }
+            })
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -38,14 +52,11 @@ class ITCPServiceConnection @Inject constructor(
     }
 
     override fun connect(serverModel: ServerModel): Completable {
-        return try {
+        try {
             val service = Intent(context, TCPService::class.java).apply {
                 putExtra("serverModel", serverModel)
             }
-            context.startService(service)?.let {
-                Timber.d("TCP server service is started")
-                Completable.complete()
-            } ?: Completable.error(
+            context.startService(service) ?: return Completable.error(
                 DataException.ConnectionError(
                     ErrorModel(
                         ErrorCode.CONNECTION_ERROR,
@@ -55,9 +66,11 @@ class ITCPServiceConnection @Inject constructor(
                     ),
                 ),
             )
+            Timber.d("TCP server service is started")
+            return Completable.complete()
         } catch (e: Exception) {
             Timber.e(e)
-            Completable.error(
+            return Completable.error(
                 DataException.ConnectionError(
                     ErrorModel(
                         ErrorCode.CONNECTION_ERROR,

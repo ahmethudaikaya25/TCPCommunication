@@ -4,16 +4,36 @@ import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import com.ahk.tcpaidl.TCPServiceData
+import com.ahk.tcpaidl.TCPServiceDataCallback
 import com.ahk.tcpserver.model.ServerModel
 import com.ahk.tcpserver.server.ITCPServer
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 
 class TCPService : Service() {
     val disposables = CompositeDisposable()
     val tcpServer = ITCPServer()
+    val binder = object : TCPServiceData.Stub() {
+        override fun messageReceive(onMessageReceived: TCPServiceDataCallback?) {
+            tcpServer.listen().observeOn(Schedulers.io()).let { observable ->
+                disposables.add(
+                    observable.subscribe(
+                        {
+                            Timber.d("Message received: ${it.contentToString()}")
+                            onMessageReceived?.onMessageReceived(it)
+                        },
+                        {
+                            Timber.e(it)
+                            onMessageReceived?.onErrorOccurred(it.message)
+                        },
+                    ),
+                )
+            }
+        }
+    }
 
-    @Suppress("DEPRECATION")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val serverModel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent?.extras?.getParcelable("serverModel", ServerModel::class.java)
@@ -42,6 +62,6 @@ class TCPService : Service() {
     }
 
     override fun onBind(p0: Intent?): IBinder? {
-        return null
+        return binder
     }
 }

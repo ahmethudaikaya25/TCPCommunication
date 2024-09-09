@@ -12,7 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-
 rootProject.name = "TCP Communication"
 include(":app")
 include(":tcpaidl")

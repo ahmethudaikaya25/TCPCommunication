@@ -1,6 +1,7 @@
 package com.ahk.tcpcommunication.domain.network
 
 import com.ahk.tcpcommunication.core.data.network.NetworkService
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 
 class NetworkRepositoryImpl(
@@ -10,7 +11,7 @@ class NetworkRepositoryImpl(
         return networkService.fetchIp()
     }
 
-    override fun isWifiConnected(): Single<Boolean> {
+    override fun isWifiConnected(): Completable {
         return networkService.isWifiConnected()
     }
 }
